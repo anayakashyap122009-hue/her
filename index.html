@@ -23,10 +23,11 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  font-size:28px;
+  font-size:24px;
   background:black;
-  cursor:pointer;
   z-index:10;
+  cursor:pointer;
+  text-align:center;
 }
 
 /* STARS */
@@ -45,7 +46,7 @@ body{
 /* HEARTS */
 .heart{
   position:absolute;
-  font-size:18px;
+  font-size:16px;
   animation:float 6s linear infinite;
 }
 @keyframes float{
@@ -57,7 +58,7 @@ body{
 /* KISS */
 .kiss{
   position:absolute;
-  font-size:26px;
+  font-size:22px;
   pointer-events:none;
 }
 
@@ -74,12 +75,12 @@ body{
   position:relative;
 }
 
-/* IMAGES */
+/* IMAGE STYLE */
 img{
-  border-radius:15px;
-  padding:10px;
+  border-radius:12px;
+  padding:6px;
   background:white;
-  box-shadow:0 10px 40px rgba(0,0,0,0.5);
+  box-shadow:0 8px 25px rgba(0,0,0,0.5);
 }
 
 /* CENTER */
@@ -88,30 +89,31 @@ img{
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
-  width:260px;
+  width:220px;
 }
 
 /* CORNERS */
 .corner{
   position:absolute;
-  width:170px;
+  width:140px;
 }
-.top-left{top:40px;left:40px;}
-.top-right{top:40px;right:40px;}
-.bottom-left{bottom:40px;left:40px;}
-.bottom-right{bottom:40px;right:40px;}
+.top-left{top:20px;left:15px;}
+.top-right{top:20px;right:15px;}
+.bottom-left{bottom:20px;left:15px;}
+.bottom-right{bottom:20px;right:15px;}
 
 /* BUTTON */
 .btn{
   position:absolute;
-  bottom:30px;
+  bottom:20px;
   left:50%;
   transform:translateX(-50%);
-  padding:12px 25px;
+  padding:10px 20px;
   background:white;
   color:black;
   border-radius:25px;
   cursor:pointer;
+  font-size:14px;
 }
 
 /* SECOND PAGE */
@@ -124,22 +126,35 @@ img{
 }
 
 /* IMAGE TEXT */
-.image-container{position:relative;}
+.image-container{
+  position:relative;
+}
+.image-container img{
+  width:240px;
+}
 .overlay-text{
   position:absolute;
   bottom:10px;
   left:50%;
   transform:translateX(-50%);
-  font-size:30px;
-  text-shadow:0 0 20px pink;
+  font-size:20px;
+  text-shadow:0 0 15px pink;
+}
+
+/* TEXT */
+#para{
+  width:90%;
+  font-size:16px;
+  margin-top:15px;
 }
 
 /* FINAL TEXT */
 .final{
-  font-size:45px;
+  font-size:28px;
   opacity:0;
-  text-shadow:0 0 30px hotpink;
+  text-shadow:0 0 25px hotpink;
   transition:1s;
+  margin-top:10px;
 }
 </style>
 
@@ -157,10 +172,9 @@ img{
   <source src="song.mp3">
 </audio>
 
-<!-- STARS + HEARTS -->
-
 <script>
-for(let i=0;i<100;i++){
+/* STARS */
+for(let i=0;i<80;i++){
  let s=document.createElement("div");
  s.className="star";
  s.style.left=Math.random()*100+"%";
@@ -168,7 +182,8 @@ for(let i=0;i<100;i++){
  document.body.appendChild(s);
 }
 
-for(let i=0;i<25;i++){
+/* HEARTS */
+for(let i=0;i<20;i++){
  let h=document.createElement("div");
  h.className="heart";
  h.innerHTML="💖";
@@ -198,7 +213,7 @@ for(let i=0;i<25;i++){
   <div class="kiss" id="k3">💋</div>
   <div class="kiss" id="k4">💋</div>
 
-  <div class="btn" onclick="next()">Swipe ➡️</div>
+  <div class="btn" onclick="next()" ontouchstart="next()">Swipe ➡️</div>
 </div>
 
 <!-- SECOND PAGE -->
@@ -206,7 +221,7 @@ for(let i=0;i<25;i++){
 <div class="slide second">
 
   <div class="image-container">
-    <img src="her.jpg" width="300">
+    <img src="her.jpg">
     <div class="overlay-text">My Beautiful Wifeyy 💖</div>
   </div>
 
@@ -235,46 +250,46 @@ function next(){
  type();
 }
 
-/* KISS ANIMATION */
+/* TOUCH SWIPE */
+let startX=0;
+document.addEventListener("touchstart",e=>{
+ startX=e.touches[0].clientX;
+});
+document.addEventListener("touchend",e=>{
+ let endX=e.changedTouches[0].clientX;
+ if(startX-endX>50){ next(); }
+});
+
+/* KISSES */
 function animateKisses(){
+ let cx=window.innerWidth/2;
+ let cy=window.innerHeight/2;
 
-  let cx = window.innerWidth/2;
-  let cy = window.innerHeight/2;
+ let targets=[
+  {x:40,y:40},
+  {x:window.innerWidth-40,y:40},
+  {x:40,y:window.innerHeight-40},
+  {x:window.innerWidth-40,y:window.innerHeight-40}
+ ];
 
-  let targets = [
-    {x:80, y:80},
-    {x:window.innerWidth-80, y:80},
-    {x:80, y:window.innerHeight-80},
-    {x:window.innerWidth-80, y:window.innerHeight-80}
-  ];
+ let kisses=[k1,k2,k3,k4];
 
-  let kisses = [
-    document.getElementById("k1"),
-    document.getElementById("k2"),
-    document.getElementById("k3"),
-    document.getElementById("k4")
-  ];
+ kisses.forEach((k,i)=>{
+  function move(){
+    k.style.left=cx+"px";
+    k.style.top=cy+"px";
 
-  kisses.forEach((k, i)=>{
-    function move(){
-      k.style.left = cx + "px";
-      k.style.top = cy + "px";
-
-      k.animate([
-        { transform: "translate(0,0) scale(0.5)", opacity:0 },
-        { transform: "translate("+(targets[i].x-cx)+"px,"+(targets[i].y-cy)+"px) scale(1.2)", opacity:1 }
-      ],{
-        duration:2000,
-        easing:"ease-out"
-      });
-    }
-
-    setInterval(move, 2200);
-    move();
-  });
+    k.animate([
+      {transform:"translate(0,0) scale(0.5)",opacity:0},
+      {transform:`translate(${targets[i].x-cx}px,${targets[i].y-cy}px) scale(1.2)`,opacity:1}
+    ],{duration:2000});
+  }
+  setInterval(move,2200);
+  move();
+ });
 }
 
-/* TYPE TEXT */
+/* TYPE */
 let text="You are my world, my happiness, my everything. I will love you forever 💖";
 let i=0;
 
