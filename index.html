@@ -23,26 +23,10 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  font-size:30px;
+  font-size:28px;
   background:black;
-  z-index:10;
   cursor:pointer;
-  animation:fadeIn 2s;
-}
-@keyframes fadeIn{from{opacity:0;}}
-
-/* HEARTBEAT BG */
-body::after{
-  content:"";
-  position:absolute;
-  width:200%;
-  height:200%;
-  background:radial-gradient(circle, rgba(255,0,100,0.2), transparent);
-  animation:pulse 3s infinite;
-}
-@keyframes pulse{
-  0%,100{transform:scale(1);}
-  50%{transform:scale(1.1);}
+  z-index:10;
 }
 
 /* STARS */
@@ -68,6 +52,13 @@ body::after{
   0%{transform:translateY(100vh);opacity:0;}
   50%{opacity:1;}
   100%{transform:translateY(-10vh);opacity:0;}
+}
+
+/* KISS */
+.kiss{
+  position:absolute;
+  font-size:26px;
+  pointer-events:none;
 }
 
 /* SLIDER */
@@ -96,12 +87,8 @@ img{
   position:absolute;
   top:50%;
   left:50%;
-  transform:translate(-50%,-50%) scale(0.9);
+  transform:translate(-50%,-50%);
   width:260px;
-  animation:zoom 4s infinite alternate;
-}
-@keyframes zoom{
-  to{transform:translate(-50%,-50%) scale(1);}
 }
 
 /* CORNERS */
@@ -127,12 +114,13 @@ img{
   cursor:pointer;
 }
 
-/* SECOND */
+/* SECOND PAGE */
 .second{
   display:flex;
   justify-content:center;
   align-items:center;
   flex-direction:column;
+  text-align:center;
 }
 
 /* IMAGE TEXT */
@@ -148,22 +136,10 @@ img{
 
 /* FINAL TEXT */
 .final{
-  font-size:50px;
+  font-size:45px;
   opacity:0;
-  text-shadow:0 0 40px hotpink;
+  text-shadow:0 0 30px hotpink;
   transition:1s;
-}
-
-/* SHAKE */
-@keyframes shake{
-  0%{transform:translate(0);}
-  25%{transform:translate(5px);}
-  50%{transform:translate(-5px);}
-  75%{transform:translate(5px);}
-  100%{transform:translate(0);}
-}
-.shake{
-  animation:shake 0.5s infinite;
 }
 </style>
 
@@ -171,17 +147,20 @@ img{
 
 <body>
 
-<div id="intro" onclick="start()">
-  Tap to enter my world 💖
-</div>
+<!-- INTRO -->
+
+<div id="intro" onclick="start()">Tap to enter my world 💖</div>
+
+<!-- MUSIC -->
 
 <audio id="music" loop>
   <source src="song.mp3">
 </audio>
 
+<!-- STARS + HEARTS -->
+
 <script>
-/* STARS */
-for(let i=0;i<120;i++){
+for(let i=0;i<100;i++){
  let s=document.createElement("div");
  s.className="star";
  s.style.left=Math.random()*100+"%";
@@ -189,8 +168,7 @@ for(let i=0;i<120;i++){
  document.body.appendChild(s);
 }
 
-/* HEARTS */
-for(let i=0;i<30;i++){
+for(let i=0;i<25;i++){
  let h=document.createElement("div");
  h.className="heart";
  h.innerHTML="💖";
@@ -202,7 +180,10 @@ for(let i=0;i<30;i++){
 
 <div class="slider" id="slider">
 
+<!-- FIRST PAGE -->
+
 <div class="slide">
+
   <img src="his.jpg" class="center">
 
   <img src="her.jpg" class="corner top-left">
@@ -210,8 +191,17 @@ for(let i=0;i<30;i++){
   <img src="herrr.jpg" class="corner bottom-left">
   <img src="herrrr.jpg" class="corner bottom-right">
 
+  <!-- 4 KISSES -->
+
+  <div class="kiss" id="k1">💋</div>
+  <div class="kiss" id="k2">💋</div>
+  <div class="kiss" id="k3">💋</div>
+  <div class="kiss" id="k4">💋</div>
+
   <div class="btn" onclick="next()">Swipe ➡️</div>
 </div>
+
+<!-- SECOND PAGE -->
 
 <div class="slide second">
 
@@ -232,17 +222,60 @@ for(let i=0;i<30;i++){
 
 <script>
 
+/* START */
 function start(){
  document.getElementById("intro").style.display="none";
  document.getElementById("music").play();
+ animateKisses();
 }
 
+/* SLIDE */
 function next(){
  document.getElementById("slider").style.transform="translateX(-50%)";
  type();
 }
 
-let text="You are my heart, my soul, my everything. No matter what happens, I will always be yours forever 💖";
+/* KISS ANIMATION */
+function animateKisses(){
+
+  let cx = window.innerWidth/2;
+  let cy = window.innerHeight/2;
+
+  let targets = [
+    {x:80, y:80},
+    {x:window.innerWidth-80, y:80},
+    {x:80, y:window.innerHeight-80},
+    {x:window.innerWidth-80, y:window.innerHeight-80}
+  ];
+
+  let kisses = [
+    document.getElementById("k1"),
+    document.getElementById("k2"),
+    document.getElementById("k3"),
+    document.getElementById("k4")
+  ];
+
+  kisses.forEach((k, i)=>{
+    function move(){
+      k.style.left = cx + "px";
+      k.style.top = cy + "px";
+
+      k.animate([
+        { transform: "translate(0,0) scale(0.5)", opacity:0 },
+        { transform: "translate("+(targets[i].x-cx)+"px,"+(targets[i].y-cy)+"px) scale(1.2)", opacity:1 }
+      ],{
+        duration:2000,
+        easing:"ease-out"
+      });
+    }
+
+    setInterval(move, 2200);
+    move();
+  });
+}
+
+/* TYPE TEXT */
+let text="You are my world, my happiness, my everything. I will love you forever 💖";
 let i=0;
 
 function type(){
@@ -251,36 +284,10 @@ function type(){
   i++;
   setTimeout(type,40);
  } else {
-  let f=document.getElementById("final");
-  f.style.opacity=1;
-  f.classList.add("shake");
-
-  explode();
+  document.getElementById("final").style.opacity=1;
  }
 }
 
-/* PARTICLE EXPLOSION */
-function explode(){
- for(let i=0;i<50;i++){
-  let p=document.createElement("div");
-  p.innerHTML="✨";
-  p.style.position="absolute";
-  p.style.left="50%";
-  p.style.top="50%";
-  p.style.fontSize="20px";
-  document.body.appendChild(p);
-
-  let x=(Math.random()-0.5)*500;
-  let y=(Math.random()-0.5)*500;
-
-  p.animate([
-    {transform:"translate(0,0)",opacity:1},
-    {transform:`translate(${x}px,${y}px)`,opacity:0}
-  ],{
-    duration:1000
-  });
- }
-}
 </script>
 
 </body>
