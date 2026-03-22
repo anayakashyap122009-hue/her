@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Love 💖</title>
+
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+
+  /* CUTE BACKGROUND */
+  background: radial-gradient(circle at top, #ffd6e0, #ff9ec4, #ff6fa5);
+}
+
+/* FLOATING HEARTS */
+.heart {
+  position: absolute;
+  font-size: 20px;
+  animation: float 6s linear infinite;
+}
+@keyframes float {
+  0% { transform: translateY(100vh); opacity:0; }
+  50% { opacity:1; }
+  100% { transform: translateY(-10vh); opacity:0; }
+}
+
+/* SPARKLES */
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  animation: sparkle 2s infinite;
+}
+@keyframes sparkle {
+  0% { opacity:0; transform: scale(0.5);}
+  50% { opacity:1; transform: scale(1.5);}
+  100% { opacity:0; transform: scale(0.5);}
+}
+
+/* SLIDER */
+.slider {
+  display: flex;
+  width: 200%;
+  height: 100vh;
+  transition: 0.8s ease;
+}
+.slide {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+/* POLAROID */
+img {
+  border-radius: 15px;
+  padding: 10px;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* CENTER */
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 260px;
+}
+
+/* CORNERS */
+.corner {
+  position: absolute;
+  width: 170px;
+}
+.top-left { top: 40px; left: 40px; transform: rotate(-8deg); }
+.top-right { top: 40px; right: 40px; transform: rotate(8deg); }
+.bottom-left { bottom: 40px; left: 40px; transform: rotate(8deg); }
+.bottom-right { bottom: 40px; right: 40px; transform: rotate(-8deg); }
+
+/* BUTTON */
+.btn {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 25px;
+  background: white;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* SECOND PAGE */
+.second {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align:center;
+}
+
+/* IMAGE TEXT */
+.image-container{
+  position: relative;
+}
+.image-container img{
+  width: 320px;
+}
+.overlay-text{
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  text-shadow: 0 0 15px hotpink, 0 0 30px pink;
+}
+
+/* PARAGRAPH */
+.love-para{
+  color:white;
+  font-size:20px;
+  width:70%;
+  margin-top:20px;
+  text-shadow:0 0 10px pink;
+}
+
+/* FINAL TEXT */
+.final-text{
+  color:white;
+  font-size:40px;
+  margin-top:20px;
+  opacity:0;
+  text-shadow:0 0 20px hotpink,0 0 40px pink;
+  transition:1s;
+}
+</style>
+
+</head>
+
+<body onclick="playMusic()">
+
+<!-- MUSIC -->
+
+<audio id="music" loop>
+  <source src="song.mp3" type="audio/mp3">
+</audio>
+
+<!-- HEARTS + SPARKLES -->
+
+<script>
+for(let i=0;i<30;i++){
+  let h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="💖";
+  h.style.left=Math.random()*100+"%";
+  h.style.animationDuration=(4+Math.random()*3)+"s";
+  document.body.appendChild(h);
+}
+
+for(let i=0;i<40;i++){
+  let s=document.createElement("div");
+  s.className="sparkle";
+  s.style.left=Math.random()*100+"%";
+  s.style.top=Math.random()*100+"%";
+  document.body.appendChild(s);
+}
+</script>
+
+<div class="slider" id="slider">
+
+  <!-- FIRST PAGE -->
+
+  <div class="slide">
+    <img src="his.jpg" class="center">
+
+```
+<img src="her.jpg" class="corner top-left">
+<img src="herr.jpg" class="corner top-right">
+<img src="herrr.jpg" class="corner bottom-left">
+<img src="herrrr.jpg" class="corner bottom-right">
+
+<canvas id="canvas"></canvas>
+
+<div class="btn" onclick="nextSlide()">Swipe ➡️</div>
+```
+
+  </div>
+
+  <!-- SECOND PAGE -->
+
+  <div class="slide second">
+
+```
+<div class="image-container">
+  <img src="her.jpg">
+  <div class="overlay-text">My Beautiful Wifeyy 💖</div>
+</div>
+
+<p class="love-para" id="para"></p>
+
+<div class="final-text" id="finalText">
+  I LOVE YOU LAKSHITA SHARMA 💖
+</div>
+```
+
+  </div>
+
+</div>
+
+<script>
+let slider = document.getElementById("slider");
+
+function nextSlide(){
+  slider.style.transform = "translateX(-50%)";
+  startTyping();
+}
+
+/* MUSIC */
+function playMusic(){
+  document.getElementById("music").play();
+}
+
+/* ROPE */
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+function rope(x1,y1,x2,y2){
+  ctx.beginPath();
+  ctx.moveTo(x1,y1);
+  ctx.quadraticCurveTo((x1+x2)/2, (y1+y2)/2 - 120, x2,y2);
+  ctx.lineWidth = 5;
+  ctx.strokeStyle = "#8b5a2b";
+  ctx.stroke();
+
+  ctx.fillStyle = "white";
+  ctx.font = "18px Arial";
+  ctx.fillText("Mine Love", (x1+x2)/2 - 40, (y1+y2)/2);
+}
+
+let cx = window.innerWidth/2;
+let cy = window.innerHeight/2;
+
+rope(80,80,cx,cy);
+rope(window.innerWidth-80,80,cx,cy);
+rope(80,window.innerHeight-80,cx,cy);
+rope(window.innerWidth-80,window.innerHeight-80,cx,cy);
+
+/* TYPING */
+let text = "I love you more than anything in this world. You are my happiness, my peace, and my forever. No matter what happens, I will always be with you. You are not just my love, you are my everything 💖";
+let i = 0;
+
+function startTyping(){
+  if(i < text.length){
+    document.getElementById("para").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(startTyping, 40);
+  } else {
+    document.getElementById("finalText").style.opacity = 1;
+  }
+}
+</script>
+
+</body>
+</html>
